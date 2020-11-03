@@ -1,6 +1,8 @@
 # connection_blocker
 Connection blocker / blacklister against ssh bruteforce, made in Rust.
 
+As it uses iptables, it will work only on linux.
+
 Demo: https://youtu.be/mpgj-rdT-A8
 
 Compile the project with: cargo build --release
