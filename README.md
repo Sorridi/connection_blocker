@@ -19,4 +19,7 @@ Setup example:
   3) iptables -t mangle -A PREROUTING -j PERMITTED
   4) iptables -t mangle -N BLOCKED -p tcp --dport 22
   5) iptables -t mangle -A PREROUTING -j BLOCKED
+  
+BEFORE RUNNING THE TOOL, PLEASE BE SURE TO PUT YOUR IP THE "PERMITTED" CHAIN, OR WHITELIST IT IN THE ./connection_blocker_data/whitelist_ips.txt THAT WILL BE CREATED THE SECOND TIME YOU EXECUTE THE TOOL.
+  
   6) ./connection_blocker /var/log/auth.log BLOCKED mangle 84600
