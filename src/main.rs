@@ -1,4 +1,5 @@
 use std::fs::{File, OpenOptions, create_dir};
+use std::io;
 use std::io::{BufReader, prelude::*, Error};
 use std::path::Path;
 use std::env;
@@ -14,6 +15,8 @@ use crate::input::{Input};
 fn main() {
 
     let input = Input::new(env::args().collect());
+
+    let mut cont = false;
 
     loop {
         let path = "./connection_blocker_data";
@@ -32,11 +35,27 @@ fn main() {
         let auth_log = file_exists(&formatted_al);
     
         match (whitelisted_ips, blocked_ips, auth_log) {
-            (true, true, true) => (),
+            (true, true, true) => {
+                if !cont {
+                    println!("(!) Please be sure to whitelist your IP in the ./connection_blocker_data/whitelist_ips.txt (!)");
+                    println!("Are you sure to go ahead and execute the rest of the program? (y/n)");
+    
+                    let mut go_ahead = String::new();
+                    io::stdin().read_line(&mut go_ahead).expect("error");
+                
+                    if go_ahead.trim().to_lowercase() != "y" {
+                        break;
+                    }
+                    cont = true;
+                }
+            },
             (_, _, false) => panic!("The file {} does not exist!", formatted_al),
             (false, false, _) => {
                 match (create_file(&formatted_wl), create_file(&formatted_bl)) {
-                    (Ok(_), Ok(_)) => (),
+                    (Ok(_), Ok(_)) => {
+                        println!("(!) It seems that is the first time you use this tool, please be sure to whitelist your IP in the ./connection_blocker_data/whitelist_ips.txt (!)");
+                            break;
+                    },
                     _ => panic!("Could not create file!")
                 }
             }
