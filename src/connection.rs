@@ -1,5 +1,8 @@
 use crate::input::Input;
+use crate::get_time;
+use iptables::IPTables;
 
+#[derive(Clone)]
 pub struct TotalConnections {
     bl_conn: Vec<Connection>,
     wl_conn: Vec<Connection>,
@@ -29,15 +32,14 @@ impl TotalConnections {
         }
     }
 
-    pub fn try_push(&mut self, conn: Connection, input: &Input) {
+    pub fn try_push(&mut self, conn: Connection, input: &Input, ipt: &IPTables) {
         if !self.bl_conn.contains(&conn) & !self.wl_conn.contains(&conn) {
             self.bl_tot += 1;
 
             let conn_clone = conn.clone();
             let conn_clone_ip = conn_clone.get_ip();
-            println!("[+] {} » {}", self.bl_tot, conn_clone_ip);
+            println!("[{}] [+] {} » {}", get_time(), self.bl_tot, conn_clone_ip);
 
-            let ipt = iptables::new(false).unwrap();
             ipt.insert(input.get_table(), input.get_chain(), format!("-s {} -j DROP", conn_clone_ip).as_str(), 1).unwrap();
 
             self.bl_conn.push(conn);
@@ -47,7 +49,7 @@ impl TotalConnections {
     pub fn push_wl(&mut self, conn: Connection) {
         if !self.wl_conn.contains(&conn) {
             self.wl_tot += 1;
-            println!("[/] {} » {}", self.wl_tot, &conn.clone().get_ip());
+            println!("[{}] [/] {} » {}", get_time(), self.wl_tot, &conn.clone().get_ip());
             self.wl_conn.push(conn);
         }
     }

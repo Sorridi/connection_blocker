@@ -1,7 +1,8 @@
 pub struct Input {
     file: String,
     table: String,
-    chain: String
+    chain: String,
+    cycle: String
 }
 
 impl Input {
@@ -10,7 +11,8 @@ impl Input {
         Input {
             file: vec[1].clone(),
             chain: vec[2].clone(),
-            table: vec[3].clone()
+            table: vec[3].clone(),
+            cycle: vec[4].clone()
         }
     }
     
@@ -25,4 +27,9 @@ impl Input {
     pub fn get_chain(&self) -> &String {
         &self.chain
     }
+
+    pub fn get_cycle(&self) -> &String {
+        &self.cycle
+    }
+    
 }

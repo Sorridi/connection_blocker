@@ -7,4 +7,5 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-iptables = "0.2.2"
+iptables = { git = "https://github.com/Sorridi/rust-iptables", rev = "8c0b1c2"}
+chrono = "0.4"
