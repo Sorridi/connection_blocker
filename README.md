@@ -13,7 +13,10 @@ The file needs 3 arguments separed with a whitespace:
   3) Table name
   4) Time (in seconds) of pause to unblock connections that have 0 bytes sent
 
-Example:
-  1) iptables -t mangle -N BLOCKED -p tcp --dport 22
-  2) iptables -t mangle -A PREROUTING -j BLOCKED
-  3) ./connection_blocker /var/log/auth.log BLOCKED mangle 84600
+Setup example:
+  1) iptables -t mangle -N PERMITTED -p tcp --dport 22
+  2) iptables -t mangle -A PERMITTED -s <YOUR_IP> -j ACCEPT
+  3) iptables -t mangle -A PREROUTING -j PERMITTED
+  4) iptables -t mangle -N BLOCKED -p tcp --dport 22
+  5) iptables -t mangle -A PREROUTING -j BLOCKED
+  6) ./connection_blocker /var/log/auth.log BLOCKED mangle 84600
