@@ -34,17 +34,15 @@ impl TotalConnections {
 
     pub fn try_push(&mut self, conn: Connection, input: &Input, ipt: &IPTables) {
         if !self.bl_conn.contains(&conn) & !self.wl_conn.contains(&conn) {
+            self.bl_tot += 1;
 
             let conn_clone = conn.clone();
             let conn_clone_ip = conn_clone.get_ip();
-
-            if conn_clone_ip == "127.0.0.1" { return }
 
             println!("[{}] [+] {} » {}", get_time(), self.bl_tot, conn_clone_ip);
             ipt.insert(input.get_table(), input.get_chain(), format!("-s {} -j DROP", conn_clone_ip).as_str(), 1).unwrap();
             self.bl_conn.push(conn);
 
-            self.bl_tot += 1;
         }
     }
 

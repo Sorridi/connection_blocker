@@ -104,8 +104,15 @@ fn main() {
         for line in auth_log.lines() {
             let line = line.split(" ");
     
+            let mut contains = false;
+
+            for word in line.clone() {
+                if word == "Failed" { contains = true }
+            }
+
+            if !contains { continue }
+
             for word in line {
-    
                 if check_ip_validity(word) {
                     let connection = Connection::new(word.to_string());
                     tot_connections.try_push(connection, &input, &ipt);
